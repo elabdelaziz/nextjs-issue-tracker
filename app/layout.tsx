@@ -29,7 +29,6 @@ export default function RootLayout({
           className="h-full flex flex-col"
           appearance="dark"
           accentColor="teal"
-          radius="full"
         >
           <NavBar />
           <main className="p-5 flex-grow flex">{children}</main>
