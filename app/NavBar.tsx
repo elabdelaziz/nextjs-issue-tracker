@@ -12,13 +12,16 @@ const NavBar = () => {
   ]
   const path = usePathname()
   return (
-    <nav className="flex p-4 gap-6 text-zinc-500 border-b-1 border-gray-200">
+    <nav className="flex p-4 gap-6 border-b-1 border-gray-200">
       <Link href="/">Logo</Link>
-      <ul className="flex gap-4">
+      <ul className="flex gap-4 text-zinc-500">
         {links.map((link) => (
           <li
             key={link.url}
-            className={clsx(path === link.url && "text-zinc-800", "hover:text-zinc-800")}
+            className={clsx(
+              path === link.url && "text-zinc-800",
+              "hover:text-zinc-800"
+            )}
           >
             <Link href={link.url}>{link.label}</Link>
           </li>
