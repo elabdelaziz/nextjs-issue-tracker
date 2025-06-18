@@ -12,7 +12,7 @@ const NavBar = () => {
   ]
   const path = usePathname()
   return (
-    <nav className="flex p-4 gap-6 border-b-1 border-gray-200">
+    <nav className="flex p-4 gap-6 border-b-[1px] border-zinc-600">
       <Link href="/">Logo</Link>
       <ul className="flex gap-4 text-zinc-500">
         {links.map((link) => (
