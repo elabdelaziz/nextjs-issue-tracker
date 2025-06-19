@@ -24,14 +24,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} min-h-screen flex flex-col`}>
+      <body className={inter.variable}>
         <Theme
           className="h-full flex flex-col"
           appearance="dark"
           accentColor="teal"
         >
           <NavBar />
-          <main className="p-5 flex-grow flex">{children}</main>
+          <main className="p-5">{children}</main>
         </Theme>
       </body>
     </html>
