@@ -3,6 +3,7 @@ import { Button, Table } from "@radix-ui/themes";
 import axios from "axios";
 import Link from "next/link";
 import React from "react";
+import IssueStatus from "../components/IssueStatus";
 
 const Issues = async () => {
   const issues = await prisma.issue.findMany();
@@ -27,8 +28,12 @@ const Issues = async () => {
         <Table.Body>
           {issues.map((issue) => (
             <Table.Row key={issue.id}>
-              <Table.Cell>{issue.title}</Table.Cell>
-              <Table.Cell>{issue.status}</Table.Cell>
+              <Table.Cell>
+                <Link href={`issues/${issue.id}`}>{issue.title}</Link>
+              </Table.Cell>
+              <Table.Cell>
+                <IssueStatus status={issue.status} />
+              </Table.Cell>
               <Table.Cell className="hidden md:table-cell">
                 {issue.createdAt.toDateString()}
               </Table.Cell>
