@@ -6,19 +6,19 @@ import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createIssueResolveSchema } from "@/app/validationSchemas";
+import { IssueValidationSchema } from "@/app/validationSchemas";
 import { z } from "zod";
 import { Issue } from "@prisma/client";
 
-type IssueFormData = z.infer<typeof createIssueResolveSchema>;
+type IssueFormData = z.infer<typeof IssueValidationSchema>;
 
-const IssueForm = ({ issue }: {issue?: Issue}) => {
+const IssueForm = ({ issue }: { issue?: Issue }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IssueFormData>({
-    resolver: zodResolver(createIssueResolveSchema),
+    resolver: zodResolver(IssueValidationSchema),
   });
   const [error, setError] = useState("");
   const router = useRouter();
@@ -42,7 +42,11 @@ const IssueForm = ({ issue }: {issue?: Issue}) => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="mt-2 space-y-6">
           <div>
-            <TextField.Root defaultValue={issue?.title} {...register("title")} placeholder="Title..." />
+            <TextField.Root
+              defaultValue={issue?.title}
+              {...register("title")}
+              placeholder="Title..."
+            />
             {errors.title && (
               <Text as="p" color="red">
                 {errors.title.message}
@@ -50,7 +54,11 @@ const IssueForm = ({ issue }: {issue?: Issue}) => {
             )}
           </div>
           <div>
-            <TextArea defaultValue={issue?.description} {...register("description")} placeholder="description" />
+            <TextArea
+              defaultValue={issue?.description}
+              {...register("description")}
+              placeholder="description"
+            />
             {errors.description && (
               <Text as="p" color="red">
                 {errors.description.message}

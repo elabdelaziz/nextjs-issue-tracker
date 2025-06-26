@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
-export const createIssueResolveSchema = z.object({
+export const IssueValidationSchema = z.object({
   title: z.string().min(1).max(255),
-  description: z.string().min(1)
+  description: z.string().min(1),
 });
+ 
