@@ -1,17 +1,18 @@
-import { prisma } from '@/prisma/client'
-import React from 'react'
+import { prisma } from "@/prisma/client";
+import { Box, Flex, Grid } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
-import { Box, Button, Card, Flex, Grid, Heading, Text } from "@radix-ui/themes";
-import IssueStatus from "@/app/components/IssueStatus";
+import EditIssueButton from "./EditIssueButton";
+import IssueDetails from "./IssueDetails";
 
 interface Props {
   params: { id: string };
 }
 
-const IssueDetailsPage = async ({ params }: Props) => {
+const IssueDetailsPage = async (props: Props) => {
+  const { id } = props.params;
   const issue = await prisma.issue.findUnique({
     where: {
-      id: parseInt(params.id),
+      id: parseInt(id),
     },
   });
 
@@ -20,18 +21,13 @@ const IssueDetailsPage = async ({ params }: Props) => {
   return (
     <Grid columns={{ initial: "1", md: "2" }} gap="5">
       <Flex direction="column" gap="4">
-        <Heading as="h2">{issue.title}</Heading>
-        <Flex gap="4">
-          <IssueStatus status={issue.status} />
-          <Text>{issue.createdAt.toDateString()}</Text>
-        </Flex>
-        <Card>{issue.description}</Card>
+        <IssueDetails issue={issue} />
       </Flex>
       <Box>
-        <Button>Edit</Button>
+        <EditIssueButton issueId={issue.id} />
       </Box>
     </Grid>
   );
 };
 
-export default IssueDetailsPage
+export default IssueDetailsPage;
