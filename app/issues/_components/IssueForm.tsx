@@ -25,7 +25,9 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
   const onSubmit = async (data: IssueFormData) => {
     try {
-      await axios.post("/api/issues", data);
+      if (issue) await axios.patch(`/api/issues/${issue.id}`, data);
+      else await axios.post("/api/issues", data);
+
       router.push("/issues");
     } catch (error) {
       setError("An unexpected error occured.");
@@ -66,7 +68,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
             )}
           </div>
           <div className="flex justify-center">
-            <Button>Submit</Button>
+            <Button>{issue ? "Update Issue" : "Submit New Issue"}</Button>
           </div>
         </div>
       </form>
