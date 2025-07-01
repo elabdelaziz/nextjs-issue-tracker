@@ -1,13 +1,10 @@
-import { prisma } from "@/prisma/client";
-import { Button, Table } from "@radix-ui/themes";
-import axios from "axios";
-import Link from "next/link";
-import React from "react";
-import IssueStatus from "../components/IssueStatus";
+import { prisma } from '@/prisma/client'
+import { Button, Table } from '@radix-ui/themes'
+import Link from 'next/link'
+import IssueStatus from '../components/IssueStatus'
 
 const Issues = async () => {
-  const issues = await prisma.issue.findMany();
-
+  const issues = await prisma.issue.findMany()
   return (
     <div>
       <div className="mb-4">
@@ -26,7 +23,7 @@ const Issues = async () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {issues.map((issue) => (
+          {issues.map(issue => (
             <Table.Row key={issue.id}>
               <Table.Cell>
                 <Link href={`issues/${issue.id}`}>{issue.title}</Link>
@@ -42,7 +39,7 @@ const Issues = async () => {
         </Table.Body>
       </Table.Root>
     </div>
-  );
-};
+  )
+}
 
-export default Issues;
+export default Issues

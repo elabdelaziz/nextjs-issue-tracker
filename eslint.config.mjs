@@ -1,7 +1,7 @@
-import { dirname } from "path";
-import { fileURLToPath } from "url";
 import { FlatCompat } from "@eslint/eslintrc";
 import stylistic from "@stylistic/eslint-plugin";
+import { dirname } from "path";
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,7 +22,7 @@ const eslintConfig = [
     // Then add/override rules
     rules: {
       // custom rules
-      "no-console": "error",
+      'no-console': ['error', { allow: ['error'] }],
 
       // Include all recommended stylistic rules
       ...stylistic.configs.recommended.rules,
