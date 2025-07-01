@@ -22,6 +22,9 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   });
   const [error, setError] = useState("");
   const router = useRouter();
+  
+  console.log("test");
+  const unusedVar = "test";
 
   const onSubmit = async (data: IssueFormData) => {
     try {
