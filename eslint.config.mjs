@@ -1,18 +1,18 @@
-import { FlatCompat } from "@eslint/eslintrc";
-import stylistic from "@stylistic/eslint-plugin";
-import { dirname } from "path";
-import { fileURLToPath } from "url";
+import { FlatCompat } from '@eslint/eslintrc'
+import stylistic from '@stylistic/eslint-plugin'
+import { dirname } from 'path'
+import { fileURLToPath } from 'url'
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
-});
+})
 
 const eslintConfig = [
   // Next.js base configurations
-  ...compat.extends("next/core-web-vitals", "next/typescript"),
+  ...compat.extends('next/core-web-vitals', 'next/typescript'),
 
   // Combined stylistic and custom rules configuration
   {
@@ -29,9 +29,29 @@ const eslintConfig = [
     },
 
     plugins: {
-      "@stylistic": stylistic,
+      '@stylistic': stylistic,
     },
   },
-];
+  {
+    files: ['**/*.test.{ts,tsx}', '**/*.spec.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [{
+            name: '@/prisma/client',
+            importNames: ['prisma'],
+            message: 'Use prismaMock from "@/prisma/clientMock" in tests',
+          }],
+          patterns: [{
+            group: ['@prisma/client'],
+            importNames: ['PrismaClient'],
+            message: 'Use the mocked PrismaClient in test files',
+          }],
+        },
+      ],
+    },
+  },
+]
 
-export default eslintConfig;
+export default eslintConfig

@@ -1,14 +1,14 @@
 'use client'
 
-import { Button, Callout, Text, TextArea, TextField } from '@radix-ui/themes'
-import axios from 'axios'
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { createIssue, updateIssue } from '@/app/actions/issueActions'
 import { IssueValidationSchema } from '@/app/validationSchemas'
-import { z } from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Issue } from '@prisma/client'
+import { Button, Callout, Text, TextArea, TextField } from '@radix-ui/themes'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
 type IssueFormData = z.infer<typeof IssueValidationSchema>
 
@@ -25,13 +25,21 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
 
   const onSubmit = async (data: IssueFormData) => {
     try {
-      if (issue) await axios.patch(`/api/issues/${issue.id}`, data)
-      else await axios.post('/api/issues', data)
+      if (issue) {
+        await updateIssue(issue.id, data)
+      }
+      else {
+        await createIssue(data)
+      }
 
       router.push('/issues')
     }
     catch (err) {
-      setError('An unexpected error occured.')
+      setError(
+        err instanceof Error
+          ? err.message
+          : 'An unexpected error occurred',
+      )
       console.error('Error submitting issue:', err)
     }
   }
