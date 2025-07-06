@@ -1,4 +1,4 @@
-import { createIssue } from '@/app/actions/issueActions'
+import { createIssue, updateIssue } from '@/app/actions/issueActions'
 import { prismaMock } from '@/prisma/clientMock'
 import { Status } from '@prisma/client'
 
@@ -46,6 +46,41 @@ describe('Issue Actions', () => {
       prismaMock.issue.create.mockRejectedValue(new Error('Database error'))
 
       await expect(createIssue(mockFormData)).rejects.toThrow('Database error')
+    })
+  })
+
+  describe('updateIssue', () => {
+    const updatedData = {
+      title: 'Updated Title',
+      description: 'Updated Description',
+    }
+
+    const mockUpdatedIssue = {
+      ...mockCreatedIssue,
+      ...updatedData,
+      updatedAt: new Date(), // New timestamp
+    }
+
+    it('should successfully update an issue', async () => {
+      prismaMock.issue.update.mockResolvedValue(mockUpdatedIssue)
+
+      const result = await updateIssue(1, updatedData)
+
+      expect(result).toEqual(mockUpdatedIssue)
+      expect(prismaMock.issue.update).toHaveBeenCalledWith({
+        where: { id: 1 },
+        data: updatedData,
+      })
+    })
+
+    it('should throw if issue not found', async () => {
+      prismaMock.issue.update.mockRejectedValue(
+        new Error('Record to update not found'),
+      )
+
+      await expect(updateIssue(999, updatedData)).rejects.toThrow(
+        'Record to update not found',
+      )
     })
   })
 })
