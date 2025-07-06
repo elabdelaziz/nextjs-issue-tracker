@@ -1,1 +1,2 @@
+npm test -- --bail
 npm exec lint-staged
