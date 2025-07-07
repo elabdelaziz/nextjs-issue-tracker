@@ -17,8 +17,6 @@ const config: Config = {
   coverageDirectory: 'coverage',
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
-
-  // Add this to ensure test-specific environment variables are loaded
   setupFilesAfterEnv: ['<rootDir>/prisma/clientMock.ts'],
 }
 

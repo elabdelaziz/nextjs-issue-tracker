@@ -1,6 +1,11 @@
 import { createIssue, updateIssue } from '@/app/actions/issueActions'
 import { prismaMock } from '@/prisma/clientMock'
 import { Status } from '@prisma/client'
+import { revalidatePath } from 'next/cache'
+
+jest.mock('next/cache', () => ({
+  revalidatePath: jest.fn(),
+}))
 
 describe('Issue Actions', () => {
   const mockFormData = {
@@ -31,6 +36,7 @@ describe('Issue Actions', () => {
       expect(prismaMock.issue.create).toHaveBeenCalledWith({
         data: mockFormData,
       })
+      expect(revalidatePath).toHaveBeenCalledWith('/issues')
     })
 
     it('should handle validation errors', async () => {
@@ -43,9 +49,9 @@ describe('Issue Actions', () => {
     })
 
     it('should handle Prisma errors', async () => {
-      prismaMock.issue.create.mockRejectedValue(new Error('Database error'))
+      prismaMock.issue.create.mockRejectedValue(new Error('Failed to create issue'))
 
-      await expect(createIssue(mockFormData)).rejects.toThrow('Database error')
+      await expect(createIssue(mockFormData)).rejects.toThrow('Failed to create issue')
     })
   })
 
@@ -71,6 +77,7 @@ describe('Issue Actions', () => {
         where: { id: 1 },
         data: updatedData,
       })
+      expect(revalidatePath).toHaveBeenCalledWith('/issues')
     })
 
     it('should throw if issue not found', async () => {

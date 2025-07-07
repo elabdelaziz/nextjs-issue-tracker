@@ -16,7 +16,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<IssueFormData>({
     resolver: zodResolver(IssueValidationSchema),
   })
@@ -78,7 +78,7 @@ const IssueForm = ({ issue }: { issue?: Issue }) => {
             )}
           </div>
           <div className="flex justify-center">
-            <Button>{issue ? 'Update Issue' : 'Submit New Issue'}</Button>
+            <Button disabled={isSubmitting}>{issue ? 'Update Issue' : 'Submit New Issue'}</Button>
           </div>
         </div>
       </form>
