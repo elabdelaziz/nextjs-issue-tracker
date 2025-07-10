@@ -1,4 +1,4 @@
-import { createIssue, updateIssue } from '@/app/actions/issueActions'
+import { createIssue, deleteIssue, updateIssue } from '@/app/actions/issueActions'
 import { prismaMock } from '@/prisma/clientMock'
 import { Status } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
@@ -7,20 +7,20 @@ jest.mock('next/cache', () => ({
   revalidatePath: jest.fn(),
 }))
 
+const mockFormData = {
+  title: 'Test Issue',
+  description: 'Test Description',
+}
+
+const mockCreatedIssue = {
+  id: 1,
+  ...mockFormData,
+  status: 'OPEN' as Status,
+  createdAt: new Date(),
+  updatedAt: new Date(),
+}
+
 describe('Issue Actions', () => {
-  const mockFormData = {
-    title: 'Test Issue',
-    description: 'Test Description',
-  }
-
-  const mockCreatedIssue = {
-    id: 1,
-    ...mockFormData,
-    status: 'OPEN' as Status,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  }
-
   describe('createIssue', () => {
     it('should successfully create an issue', async () => {
       // "When prisma.issue.create() is called, return this fake data instead of hitting the database"
@@ -88,6 +88,18 @@ describe('Issue Actions', () => {
       await expect(updateIssue(999, updatedData)).rejects.toThrow(
         'Record to update not found',
       )
+    })
+  })
+
+  describe('deleteIssue', () => {
+    it('should successfully delete an issue', async () => {
+      prismaMock.issue.delete.mockResolvedValue(mockCreatedIssue)
+      const result = await deleteIssue(mockCreatedIssue.id)
+      expect(result).toEqual(mockCreatedIssue)
+      expect(prismaMock.issue.delete).toHaveBeenCalledWith({
+        where: { id: 1 },
+      })
+      expect(revalidatePath).toHaveBeenCalledWith('/issues')
     })
   })
 })

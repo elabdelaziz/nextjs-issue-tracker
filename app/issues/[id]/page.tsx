@@ -1,6 +1,7 @@
 import { prisma } from '@/prisma/client'
-import { Box, Flex, Grid } from '@radix-ui/themes'
+import { Flex, Grid } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
+import DeleteIssueButton from './DeleteIssueButton'
 import EditIssueButton from './EditIssueButton'
 import IssueDetails from './IssueDetails'
 
@@ -23,9 +24,10 @@ const IssueDetailsPage = async ({
       <Flex direction="column" gap="4">
         <IssueDetails issue={issue} />
       </Flex>
-      <Box>
+      <Flex direction="column" justify="between" align="start">
         <EditIssueButton issueId={issue.id} />
-      </Box>
+        <DeleteIssueButton issueId={issue.id} />
+      </Flex>
     </Grid>
   )
 }

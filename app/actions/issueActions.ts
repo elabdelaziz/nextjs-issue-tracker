@@ -37,3 +37,17 @@ export async function updateIssue(id: number, data: IssueFormData) {
     throw new Error('Record to update not found')
   }
 }
+
+export async function deleteIssue(id: number) {
+  try {
+    const result = await prisma.issue.delete({
+      where: { id },
+    })
+    revalidatePath('/issues')
+    return result
+  }
+  catch (err) {
+    console.error('Error deleting issue:', err)
+    throw new Error('Failed to delete issue')
+  }
+}
